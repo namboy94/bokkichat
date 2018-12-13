@@ -16,3 +16,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
+
+from bokkichat.connection.Settings import Settings
+from bokkichat.connection.Connection import Connection
