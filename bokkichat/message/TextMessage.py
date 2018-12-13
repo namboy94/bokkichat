@@ -46,3 +46,9 @@ class TextMessage(Message):
         super().__init__(sender, receiver)
         self.body = body
         self.title = title
+
+    def __str__(self) -> str:
+        """
+        :return: A string representation of the TextMessage object
+        """
+        return "{}: {}".format(self.title, self.body)

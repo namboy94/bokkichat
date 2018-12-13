@@ -36,6 +36,7 @@ if __name__ == "__main__":
         url="https://gitlab.namibsun.net/namibsun/python/bokkichat",
         license="GNU GPL3",
         packages=find_packages(),
+        scripts=list(map(lambda x: os.path.join("bin", x), os.listdir("bin"))),
         install_requires=[
             "typing"
         ],

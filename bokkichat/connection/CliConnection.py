@@ -20,47 +20,38 @@ LICENSE"""
 from typing import Callable, List
 from bokkichat.address.Address import Address
 from bokkichat.message.Message import Message
-from bokkichat.connection.Settings import Settings
+from bokkichat.message.TextMessage import TextMessage
+from bokkichat.connection.Connection import Connection
 
 
-class Connection:
+class CliConnection(Connection):
     """
-    Class that defines methods a Connection must implement.
-    A connection is the central class in bokkichat and handles all
-    communications with the chat services.
+    Class that implements a CLI connection which can be used in testing
     """
-
-    def __init__(self, settings: Settings):
-        """
-        Initializes the connection, with credentials provided by a
-        Settings object.
-        :param settings: The settings for the connection
-        """
-        self.settings = settings
 
     @property
     def address(self) -> Address:
         """
-        A connection must be able to specify its own address
+        A CLI connection has no real address, so a dummy address is generated.
         :return: The address of the connection
         """
-        raise NotImplementedError()
+        return Address("CLI")
 
+    # noinspection PyMethodMayBeStatic
     def send(self, message: Message):
         """
-        Sends a message. A message may be either a TextMessage
-        or a MediaMessage.
-        :param message: The message to send
+        Prints a "sent" message
+        :param message: The message to "send"
         :return: None
         """
-        raise NotImplementedError()
+        print(message)
 
     def receive(self) -> List[Message]:
         """
-        Receives all pending messages.
+        A CLI Connection receives messages by listening to the input
         :return: A list of pending Message objects
         """
-        raise NotImplementedError()
+        return [TextMessage(self.address, self.address, input())]
 
     def loop(self, callback: Callable):
         """
@@ -72,4 +63,6 @@ class Connection:
                              lambda connection, message: do_stuff()
         :return: None
         """
-        raise NotImplementedError()
+        while True:
+            for message in self.receive():
+                callback(self, message)

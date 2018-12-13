@@ -17,7 +17,24 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from bokkichat.connection.Connection import Connection
-from bokkichat.connection.Settings import Settings
-from bokkichat.connection.CliConnection import CliConnection
-from bokkichat.connection.CliSettings import CliSettings
+import argparse
+from bokkichat.address import Address
+from bokkichat.message import TextMessage
+from bokkichat.connection import CliConnection, CliSettings
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mode", choices={"send", "echo"})
+    parser.add_argument("--message", default="Hello World")
+    args = parser.parse_args()
+
+    settings = CliSettings()
+    connection = CliConnection(settings)
+
+    if args.mode == "send":
+        message = TextMessage(Address(""), Address(""), args.message)
+        connection.send(message)
+    else:
+        connection.loop(lambda con, msg: print(msg.body))

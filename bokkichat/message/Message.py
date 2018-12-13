@@ -33,3 +33,9 @@ class Message:
         """
         self.sender = sender
         self.receiver = receiver
+
+    def __str__(self) -> str:
+        """
+        :return: A string representation of the Message object
+        """
+        raise NotImplementedError()

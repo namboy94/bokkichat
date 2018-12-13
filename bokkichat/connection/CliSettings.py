@@ -17,7 +17,27 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from bokkichat.connection.Connection import Connection
 from bokkichat.connection.Settings import Settings
-from bokkichat.connection.CliConnection import CliConnection
-from bokkichat.connection.CliSettings import CliSettings
+
+
+class CliSettings(Settings):
+    """
+    Class that defines a Settings object for a CLI connection
+    """
+
+    # noinspection PyMethodMayBeStatic
+    def serialize(self) -> str:
+        """
+        Serializes the settings to a string
+        :return: The serialized Settings object
+        """
+        return ""
+
+    @classmethod
+    def deserialize(cls, _: str):
+        """
+        Deserializes a string and generates a Settings object from it
+        :param _: The serialized string
+        :return: The deserialized Settings object
+        """
+        return cls()

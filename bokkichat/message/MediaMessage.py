@@ -48,3 +48,9 @@ class MediaMessage(Message):
         self.media_type = media_type
         self.data = data
         self.caption = caption
+
+    def __str__(self) -> str:
+        """
+        :return: A string representation of the MediaMessage object
+        """
+        return "{}: {}".format(self.media_type.name, self.caption)
