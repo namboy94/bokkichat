@@ -21,3 +21,5 @@ from bokkichat.connection.Connection import Connection
 from bokkichat.connection.Settings import Settings
 from bokkichat.connection.CliConnection import CliConnection
 from bokkichat.connection.CliSettings import CliSettings
+from bokkichat.connection.TelegramConnection import TelegramConnection
+from bokkichat.connection.TelegramSettings import TelegramSettings

@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
+import logging
 from typing import Callable, List
 from bokkichat.address.Address import Address
 from bokkichat.message.Message import Message
@@ -37,6 +38,7 @@ class Connection:
         :param settings: The settings for the connection
         """
         self.settings = settings
+        self.logger = logging.getLogger("bokkichat")
 
     @property
     def address(self) -> Address:
