@@ -46,7 +46,7 @@ class TestTelegram(TestCase):
         if not os.path.isfile("bokkichat.session"):
             with open("bokkichat.session", "w") as f:
                 content = bytes(os.environ["TELEGRAM_SESSION"], "utf-8")
-                f.write(b64decode(content).encode("utf-8"))
+                f.write(b64decode(content).decode("utf-8"))
 
         self.telegram = TelegramConnection(TelegramSettings(
             api_id, api_hash, "bokkichat"
