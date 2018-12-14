@@ -56,7 +56,7 @@ class TelegramBotConnection(Connection):
         A connection must be able to specify its own address
         :return: The address of the connection
         """
-        return Address(str(self.bot.id))
+        return Address(str(self.bot.name))
 
     def send(self, message: Message):
         """
@@ -98,7 +98,7 @@ class TelegramBotConnection(Connection):
                 tempfile.close()
 
         except (telegram.error.Unauthorized, telegram.error.BadRequest):
-            self.logger.info(
+            self.logger.warning(
                 "Failed to send message to {}".format(message.receiver)
             )
 
@@ -146,7 +146,6 @@ class TelegramBotConnection(Connection):
         :return: The generated Message object.
         :raises: InvalidMessageData if the parsing failed
         """
-
         address = Address(str(message_data["chat"]["id"]))
 
         if "text" in message_data:

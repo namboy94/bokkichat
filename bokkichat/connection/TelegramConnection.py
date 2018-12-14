@@ -19,7 +19,8 @@ LICENSE"""
 
 # noinspection PyPackageRequirements
 from typing import List
-from telethon import TelegramClient
+# noinspection PyUnresolvedReferences
+from telethon import TelegramClient, sync
 from bokkichat.address.Address import Address
 from bokkichat.message.Message import Message
 from bokkichat.message.TextMessage import TextMessage
@@ -96,6 +97,7 @@ class TelegramConnection(Connection):
 
         # noinspection PyTypeChecker
         for dialog in self.client.get_dialogs():
+
             # noinspection PyTypeChecker
             for message in self.client.iter_messages(dialog.entity):
 
@@ -105,7 +107,7 @@ class TelegramConnection(Connection):
                     address = Address(dialog.name)
                     body = message.message
 
-                    generated = TextMessage(self.address, address, body)
+                    generated = TextMessage(address, self.address, body)
                     messages.append(generated)
 
                     # TODO ACK

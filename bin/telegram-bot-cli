@@ -21,7 +21,7 @@ import logging
 import argparse
 from bokkichat.address import Address
 from bokkichat.message import TextMessage, MediaMessage, MediaType
-from bokkichat.connection import TelegramSettings, TelegramConnection
+from bokkichat.connection import TelegramBotSettings, TelegramBotConnection
 
 
 def parse_args() -> argparse.Namespace:
@@ -56,11 +56,10 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
 
-    settings = TelegramSettings(args.api_key)
-    connection = TelegramConnection(settings)
+    settings = TelegramBotSettings(args.api_key)
+    connection = TelegramBotConnection(settings)
 
     if args.mode == "send":
 
