@@ -21,7 +21,7 @@ import os
 import random
 from base64 import b64decode
 from unittest import TestCase
-from bokkichat.message import TextMessage
+from bokkichat.message.TextMessage import TextMessage
 from bokkichat.connection.TelegramConnection import TelegramConnection
 from bokkichat.connection.TelegramSettings import TelegramSettings
 from bokkichat.connection.TelegramBotConnection import TelegramBotConnection
