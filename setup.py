@@ -40,6 +40,7 @@ if __name__ == "__main__":
         install_requires=[
             "typing",
             "python-telegram-bot",
+            "telethon",
             "requests"
         ],
         test_suite='nose.collector',
