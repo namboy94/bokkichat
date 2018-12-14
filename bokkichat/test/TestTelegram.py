@@ -18,10 +18,14 @@ along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
 import os
+import time
 import random
+from threading import Thread
 from base64 import b64decode
 from unittest import TestCase
+from bokkichat.message.Message import Message
 from bokkichat.message.TextMessage import TextMessage
+from bokkichat.connection.Connection import Connection
 from bokkichat.connection.TelegramConnection import TelegramConnection
 from bokkichat.connection.TelegramSettings import TelegramSettings
 from bokkichat.connection.TelegramBotConnection import TelegramBotConnection
@@ -99,3 +103,40 @@ class TestTelegram(TestCase):
                 found = True
 
         self.assertTrue(found)
+
+    def test_echoing(self):
+        """
+        Tests echoing a message from one bot to the other
+        :return: None
+        """
+        def echo(con: Connection, msg: Message):
+            con.sender = msg.sender
+            swap = msg.receiver
+            msg.receiver = msg.sender
+            msg.sender = swap
+            con.send(msg)
+            con.loop_break = True
+
+        text = "One {}".format(random.randint(0, 10000))
+        self.telegram.send(TextMessage(
+            self.telegram.address, self.telegram_bot.address, text
+        ))
+
+        self.telegram_bot.loop(echo)
+
+        found = False
+        for message in self.telegram.receive():  # type: TextMessage
+            found = message.body == text or found
+        self.assertTrue(found)
+
+        text = "Two {}".format(random.randint(0, 10000))
+
+        # noinspection PyUnresolvedReferences
+        self.telegram_bot.send(TextMessage(
+            self.telegram_bot.address, self.telegram_bot.sender, text
+        ))
+
+        self.telegram.loop(echo)
+
+        received = self.telegram_bot.receive()[-1]  # type: TextMessage
+        self.assertEqual(text, received.body)
