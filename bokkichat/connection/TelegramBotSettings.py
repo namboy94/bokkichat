@@ -26,7 +26,7 @@ class TelegramBotSettings(Settings):
     Class that defines a Settings object for a Telegram bot connection
     """
 
-    def __init__(self, api_key):
+    def __init__(self, api_key: str):
         """
         Initializes the Telegram Connection.
         :param api_key: The API key used for authentication

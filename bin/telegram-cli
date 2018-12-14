@@ -21,7 +21,8 @@ import logging
 import argparse
 from bokkichat.address import Address
 from bokkichat.message import TextMessage, MediaMessage, MediaType
-from bokkichat.connection import TelegramSettings, TelegramConnection
+from bokkichat.connection.TelegramConnection import TelegramConnection
+from bokkichat.connection import TelegramSettings
 
 
 def parse_args() -> argparse.Namespace:
@@ -34,7 +35,8 @@ def parse_args() -> argparse.Namespace:
     """
 
     parser = argparse.ArgumentParser(prog="telegram-cli")
-    parser.add_argument("api_key", help="The Bot's API key")
+    parser.add_argument("api_id", help="The Account's API ID")
+    parser.add_argument("api_hash", help="The Account's API hash")
 
     subparser = parser.add_subparsers(required=True, dest="mode")
 
@@ -56,11 +58,13 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
 
-    settings = TelegramSettings(args.api_key)
+    settings = TelegramSettings(args.api_id, args.api_hash)
+
     connection = TelegramConnection(settings)
+    connection.close()
 
     if args.mode == "send":
 
@@ -90,9 +94,12 @@ if __name__ == "__main__":
                 args.text
             )
 
+        connection.send(message)
+
     elif args.mode == "receive":
         messages = connection.receive()
 
+        print(messages)
         for message in messages:
             print(message)
 

@@ -90,6 +90,8 @@ if __name__ == "__main__":
                 args.text
             )
 
+        connection.send(message)
+
     elif args.mode == "receive":
         messages = connection.receive()
 
