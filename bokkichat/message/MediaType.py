@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from enum import Enum, auto
+from enum import Enum
 
 
 class MediaType(Enum):
@@ -25,6 +25,6 @@ class MediaType(Enum):
     Enum that specifies the various types of media that can be sent using
     MediaMessage objects.
     """
-    VIDEO = auto()
-    AUDIO = auto()
-    IMAGE = auto()
+    VIDEO = 1
+    AUDIO = 2
+    IMAGE = 3
