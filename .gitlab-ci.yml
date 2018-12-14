@@ -17,10 +17,7 @@ unittest:
     - python3
     - progstats
   script:
-    - echo $TELEGRAM_SESSION
-    - echo $TELEGRAM_SESSION > b64enc
-    - cat b64enc
-    - base64 b4enc -d
+    - echo $TELEGRAM_SESSION | tr " " "\n"
     - echo $TELEGRAM_SESSION | base64 -d > bokkichat.session
     - python3 -m venv virtual && source virtual/bin/activate && pip install ci-scripts
     - python-unittest
