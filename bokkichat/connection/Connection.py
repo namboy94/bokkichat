@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
+import time
 import logging
 from typing import Callable, List
 from bokkichat.address.Address import Address
@@ -39,6 +40,8 @@ class Connection:
         """
         self.settings = settings
         self.logger = logging.getLogger("bokkichat")
+        self.looping = False
+        self.loop_break = False
 
     @property
     def address(self) -> Address:
@@ -64,7 +67,7 @@ class Connection:
         """
         raise NotImplementedError()
 
-    def loop(self, callback: Callable):
+    def loop(self, callback: Callable, sleep_time: int = 1):
         """
         Starts a loop that periodically checks for new messages, calling
         a provided callback function in the process.
@@ -72,6 +75,24 @@ class Connection:
                          received message.
                          The callback should have the following format:
                              lambda connection, message: do_stuff()
+        :param sleep_time: The time to sleep between loops
+        :return: None
+        """
+        self.looping = True
+        while True:
+            for message in self.receive():
+                callback(self, message)
+
+            if self.loop_break:
+                self.loop_break = False
+                break
+
+            time.sleep(sleep_time)
+        self.looping = False
+
+    def close(self):
+        """
+        Disconnects the Connection.
         :return: None
         """
         raise NotImplementedError()

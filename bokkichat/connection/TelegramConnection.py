@@ -17,11 +17,10 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-import time
 # noinspection PyPackageRequirements
 import telegram
 import requests
-from typing import Callable, List
+from typing import List, Dict, Any, Optional
 from bokkichat.address.Address import Address
 from bokkichat.message.Message import Message
 from bokkichat.message.TextMessage import TextMessage
@@ -29,6 +28,7 @@ from bokkichat.message.MediaType import MediaType
 from bokkichat.message.MediaMessage import MediaMessage
 from bokkichat.connection.Connection import Connection
 from bokkichat.connection.TelegramSettings import TelegramSettings
+from bokkichat.exceptions import InvalidMessageData
 
 
 class TelegramConnection(Connection):
@@ -76,29 +76,25 @@ class TelegramConnection(Connection):
                 )
             elif isinstance(message, MediaMessage):
 
+                media_map = {
+                    MediaType.AUDIO: ("audio", self.bot.send_audio),
+                    MediaType.VIDEO: ("video", self.bot.send_video),
+                    MediaType.IMAGE: ("photo", self.bot.send_photo)
+                }
+
+                send_func = media_map[message.media_type][1]
+
+                # Write to file TODO: Check if this can be done with bytes
                 with open("/tmp/bokkichat-telegram-temp", "wb") as f:
                     f.write(message.data)
+
                 tempfile = open("/tmp/bokkichat-telegram-temp", "rb")
-
-                if message.media_type == MediaType.IMAGE:
-                    self.bot.send_photo(
-                        chat_id=message.receiver.address,
-                        photo=tempfile,
-                        caption=message.caption
-                    )
-                elif message.media_type == MediaType.AUDIO:
-                    self.bot.send_audio(
-                        chat_id=message.receiver.address,
-                        audio=tempfile,
-                        caption=message.caption
-                    )
-                else:
-                    self.bot.send_video(
-                        chat_id=message.receiver.address,
-                        video=tempfile,
-                        caption=message.caption
-                    )
-
+                params = {
+                    "chat_id": message.receiver.address,
+                    "caption": message.caption,
+                    media_map[message.media_type][0]: tempfile
+                }
+                send_func(**params)
                 tempfile.close()
 
         except (telegram.error.Unauthorized, telegram.error.BadRequest):
@@ -120,55 +116,16 @@ class TelegramConnection(Connection):
                 self.update_id = update.update_id + 1
 
                 telegram_message = update.message.to_dict()
-                address = Address(str(telegram_message['chat']['id']))
 
-                self.logger.info("Received message from {}".format(address))
-
-                if "text" in telegram_message:
-                    body = telegram_message['text']
-                    self.logger.debug("Message Body: {}".format(body))
-                    messages.append(TextMessage(address, self.address, body))
-
-                for media_key, media_type in {
-                    "photo": MediaType.IMAGE,
-                    "audio": MediaType.AUDIO,
-                    "video": MediaType.VIDEO,
-                    "voice": MediaType.AUDIO
-                }.items():
-                    if media_key in telegram_message:
-
-                        self.logger.debug("Media Type: {}".format(media_key))
-
-                        media_info = telegram_message[media_key]
-
-                        if isinstance(media_info, list):
-
-                            if len(media_info) == 0:
-                                continue
-
-                            largest = media_info[len(media_info) - 1]
-                            file_id = largest["file_id"]
-
-                        elif isinstance(media_info, dict):
-
-                            file_id = media_info["file_id"]
-
-                        else:
-                            continue
-
-                        file_info = self.bot.get_file(file_id)
-                        resp = requests.get(file_info["file_path"])
-                        data = resp.content
-
-                        messages.append(MediaMessage(
-                            address,
-                            self.address,
-                            media_type,
-                            data,
-                            telegram_message.get("caption", "")
-                        ))
-
-                        break
+                try:
+                    generated = self._parse_message(telegram_message)
+                    self.logger.info(
+                        "Received message from {}".format(generated.sender)
+                    )
+                    self.logger.debug(str(generated))
+                    messages.append(generated)
+                except InvalidMessageData as e:
+                    self.logger.error(str(e))
 
         except telegram.error.Unauthorized:
             # The self.bot.get_update method may cause an
@@ -180,17 +137,65 @@ class TelegramConnection(Connection):
 
         return messages
 
-    def loop(self, callback: Callable):
+    def _parse_message(self, message_data: Dict[str, Any]) -> \
+            Optional[Message]:
         """
-        Starts a loop that periodically checks for new messages, calling
-        a provided callback function in the process.
-        :param callback: The callback function to call for each
-                         received message.
-                         The callback should have the following format:
-                             lambda connection, message: do_stuff()
+        Parses the message data of a Telegram message and generates a
+        corresponding Message object.
+        :param message_data: The telegram message data
+        :return: The generated Message object.
+        :raises: InvalidMessageData if the parsing failed
+        """
+
+        address = Address(str(message_data["chat"]["id"]))
+
+        if "text" in message_data:
+            body = message_data["text"]
+            self.logger.debug("Message Body: {}".format(body))
+            return TextMessage(address, self.address, body)
+
+        else:
+
+            for media_key, media_type in {
+                "photo": MediaType.IMAGE,
+                "audio": MediaType.AUDIO,
+                "video": MediaType.VIDEO,
+                "voice": MediaType.AUDIO
+            }.items():
+
+                if media_key in message_data:
+
+                    self.logger.debug("Media Type: {}".format(media_key))
+                    media_info = message_data[media_key]
+
+                    if len(media_info) == 0:
+                        continue
+
+                    if isinstance(media_info, list):
+                        largest = media_info[len(media_info) - 1]
+                        file_id = largest["file_id"]
+                    elif isinstance(media_info, dict):
+                        file_id = media_info["file_id"]
+                    else:
+                        continue
+
+                    file_info = self.bot.get_file(file_id)
+                    resp = requests.get(file_info["file_path"])
+                    data = resp.content
+
+                    return MediaMessage(
+                        address,
+                        self.address,
+                        media_type,
+                        data,
+                        message_data.get("caption", "")
+                    )
+
+        raise InvalidMessageData(message_data)
+
+    def close(self):
+        """
+        Disconnects the Connection.
         :return: None
         """
-        while True:
-            for message in self.receive():
-                callback(self, message)
-            time.sleep(1)
+        pass

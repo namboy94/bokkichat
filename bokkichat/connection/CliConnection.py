@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from typing import Callable, List
+from typing import List
 from bokkichat.address.Address import Address
 from bokkichat.message.Message import Message
 from bokkichat.message.TextMessage import TextMessage
@@ -53,16 +53,9 @@ class CliConnection(Connection):
         """
         return [TextMessage(self.address, self.address, input())]
 
-    def loop(self, callback: Callable):
+    def close(self):
         """
-        Starts a loop that periodically checks for new messages, calling
-        a provided callback function in the process.
-        :param callback: The callback function to call for each
-                         received message.
-                         The callback should have the following format:
-                             lambda connection, message: do_stuff()
+        Disconnects the Connection.
         :return: None
         """
-        while True:
-            for message in self.receive():
-                callback(self, message)
+        pass
