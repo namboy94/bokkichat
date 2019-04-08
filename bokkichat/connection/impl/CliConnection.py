@@ -32,7 +32,8 @@ class CliConnection(Connection):
     @property
     def address(self) -> Address:
         """
-        A CLI connection has no real entities, so a dummy entities is generated.
+        A CLI connection has no real entities,
+        so a dummy entities is generated.
         :return: The entities of the connection
         """
         return Address("CLI")
