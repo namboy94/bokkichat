@@ -21,13 +21,13 @@ LICENSE"""
 import telegram
 import requests
 from typing import List, Dict, Any, Optional
-from bokkichat.address.Address import Address
-from bokkichat.message.Message import Message
-from bokkichat.message.TextMessage import TextMessage
-from bokkichat.message.MediaType import MediaType
-from bokkichat.message.MediaMessage import MediaMessage
+from bokkichat.entities.Address import Address
+from bokkichat.entities.message.Message import Message
+from bokkichat.entities.message.TextMessage import TextMessage
+from bokkichat.entities.message.MediaType import MediaType
+from bokkichat.entities.message.MediaMessage import MediaMessage
 from bokkichat.connection.Connection import Connection
-from bokkichat.connection.TelegramBotSettings import TelegramBotSettings
+from bokkichat.settings.impl.TelegramBotSettings import TelegramBotSettings
 from bokkichat.exceptions import InvalidMessageData
 
 
@@ -53,8 +53,8 @@ class TelegramBotConnection(Connection):
     @property
     def address(self) -> Address:
         """
-        A connection must be able to specify its own address
-        :return: The address of the connection
+        A connection must be able to specify its own entities
+        :return: The entities of the connection
         """
         return Address(str(self.bot.name))
 

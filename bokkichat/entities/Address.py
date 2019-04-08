@@ -17,25 +17,21 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from bokkichat.address.Address import Address
 
-
-class Message:
+class Address:
     """
-    Class that defines common attributes for a Message object.
+    Class that models an Address.
     """
 
-    def __init__(self, sender: Address, receiver: Address):
+    def __init__(self, address: str):
         """
-        Initializes a Message object.
-        :param sender: The sender of the message
-        :param receiver: The receiver of the message
+        Initializes the entities object
+        :param address: The actual entities to which messages can be sent
         """
-        self.sender = sender
-        self.receiver = receiver
+        self.address = address
 
     def __str__(self) -> str:
         """
-        :return: A string representation of the Message object
+        :return: The actual entities to which messages can be sent
         """
-        raise NotImplementedError()
+        return self.address

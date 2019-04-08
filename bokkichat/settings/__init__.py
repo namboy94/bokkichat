@@ -16,8 +16,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
-
-from bokkichat.message.Message import Message
-from bokkichat.message.TextMessage import TextMessage
-from bokkichat.message.MediaMessage import MediaMessage
-from bokkichat.message.MediaType import MediaType

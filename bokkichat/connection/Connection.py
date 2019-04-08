@@ -20,9 +20,9 @@ LICENSE"""
 import time
 import logging
 from typing import Callable, List
-from bokkichat.address.Address import Address
-from bokkichat.message.Message import Message
-from bokkichat.connection.Settings import Settings
+from bokkichat.entities.Address import Address
+from bokkichat.entities.message.Message import Message
+from bokkichat.settings.Settings import Settings
 
 
 class Connection:
@@ -46,8 +46,8 @@ class Connection:
     @property
     def address(self) -> Address:
         """
-        A connection must be able to specify its own address
-        :return: The address of the connection
+        A connection must be able to specify its own entities
+        :return: The entities of the connection
         """
         raise NotImplementedError()
 

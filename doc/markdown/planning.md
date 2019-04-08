@@ -6,7 +6,7 @@ Basic Idea:
 settings = TelegramSetting(username="username", password="password")
 connection = TelegramConnection(settings)
 
-msg = TextMessage(to="address", body="Hello World")
+msg = TextMessage(to=entities, body="Hello World")
 
 connection.send(msg)
 ```

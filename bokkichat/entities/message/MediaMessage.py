@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from bokkichat.message.Message import Message
-from bokkichat.address.Address import Address
-from bokkichat.message.MediaType import MediaType
+from bokkichat.entities.message.Message import Message
+from bokkichat.entities.Address import Address
+from bokkichat.entities.message.MediaType import MediaType
 
 
 class MediaMessage(Message):

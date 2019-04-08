@@ -18,10 +18,10 @@ along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
 import argparse
-from bokkichat.address import Address
-from bokkichat.message import TextMessage
-from bokkichat.connection import CliConnection, CliSettings
-
+from bokkichat.entities.Address import Address
+from bokkichat.entities.message.TextMessage import TextMessage
+from bokkichat.settings.impl.CliSettings import CliSettings
+from bokkichat.connection.impl.CliConnection import CliConnection
 
 if __name__ == "__main__":
 

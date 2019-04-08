@@ -18,9 +18,9 @@ along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
 from typing import List
-from bokkichat.address.Address import Address
-from bokkichat.message.Message import Message
-from bokkichat.message.TextMessage import TextMessage
+from bokkichat.entities.Address import Address
+from bokkichat.entities.message.Message import Message
+from bokkichat.entities.message.TextMessage import TextMessage
 from bokkichat.connection.Connection import Connection
 
 
@@ -32,8 +32,8 @@ class CliConnection(Connection):
     @property
     def address(self) -> Address:
         """
-        A CLI connection has no real address, so a dummy address is generated.
-        :return: The address of the connection
+        A CLI connection has no real entities, so a dummy entities is generated.
+        :return: The entities of the connection
         """
         return Address("CLI")
 

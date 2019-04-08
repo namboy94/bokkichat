@@ -17,11 +17,14 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-import logging
 import argparse
-from bokkichat.address import Address
-from bokkichat.message import TextMessage, MediaMessage, MediaType
-from bokkichat.connection import TelegramBotSettings, TelegramBotConnection
+from bokkichat.address.Address import Address
+from bokkichat.entities.message.TextMessage import TextMessage
+from bokkichat.entities.message.MediaMessage import MediaMessage
+from bokkichat.entities.message.MediaType import MediaType
+from bokkichat.settings.impl.TelegramBotSettings import TelegramBotSettings
+from bokkichat.connection.impl.TelegramBotConnection import \
+    TelegramBotConnection
 
 
 def parse_args() -> argparse.Namespace:

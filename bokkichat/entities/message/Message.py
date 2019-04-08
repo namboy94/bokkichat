@@ -17,38 +17,25 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from bokkichat.message.Message import Message
-from bokkichat.address.Address import Address
+from bokkichat.entities.Address import Address
 
 
-class TextMessage(Message):
+class Message:
     """
-    Class that defines an interface for text messages.
-    Each text message has a title and a body.
-    Some chat services don't allow titles for messages, in those cases,
-    the title will be blank.
+    Class that defines common attributes for a Message object.
     """
 
-    def __init__(
-            self,
-            sender: Address,
-            receiver: Address,
-            body: str,
-            title: str = ""
-    ):
+    def __init__(self, sender: Address, receiver: Address):
         """
-        Initializes the TextMessage object
+        Initializes a Message object.
         :param sender: The sender of the message
         :param receiver: The receiver of the message
-        :param body: The message body
-        :param title: The title of the message. Defaults to an empty string
         """
-        super().__init__(sender, receiver)
-        self.body = body
-        self.title = title
+        self.sender = sender
+        self.receiver = receiver
 
     def __str__(self) -> str:
         """
-        :return: A string representation of the TextMessage object
+        :return: A string representation of the Message object
         """
-        return "{}: {}".format(self.title, self.body)
+        raise NotImplementedError()

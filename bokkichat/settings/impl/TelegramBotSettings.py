@@ -18,7 +18,7 @@ along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
 import json
-from bokkichat.connection.Settings import Settings
+from bokkichat.settings.Settings import Settings
 
 
 class TelegramBotSettings(Settings):
