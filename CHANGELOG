@@ -1,2 +1,4 @@
+V 0.1.1:
+  - Enabled directly deserializing settings into connections
 V 0.1.0:
   - Initial Release
