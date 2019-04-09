@@ -98,7 +98,7 @@ if __name__ == "__main__":
         messages = connection.receive()
 
         for message in messages:
-            print(message)
+            print("{}: {}".format(message.sender, message))
 
     elif args.mode == "echo":
 
