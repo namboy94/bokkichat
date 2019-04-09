@@ -17,11 +17,12 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from typing import List
+from typing import List, Type
 from bokkichat.entities.Address import Address
 from bokkichat.entities.message.Message import Message
 from bokkichat.entities.message.TextMessage import TextMessage
 from bokkichat.connection.Connection import Connection
+from bokkichat.settings.impl.CliSettings import CliSettings
 
 
 class CliConnection(Connection):
@@ -37,6 +38,14 @@ class CliConnection(Connection):
         :return: The entities of the connection
         """
         return Address("CLI")
+
+    @staticmethod
+    def settings_cls() -> Type[CliSettings]:
+        """
+        The settings class used by this connection
+        :return: The settings class
+        """
+        return CliSettings
 
     # noinspection PyMethodMayBeStatic
     def send(self, message: Message):

@@ -20,7 +20,7 @@ LICENSE"""
 # noinspection PyPackageRequirements
 import telegram
 import requests
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Type
 from bokkichat.entities.Address import Address
 from bokkichat.entities.message.Message import Message
 from bokkichat.entities.message.TextMessage import TextMessage
@@ -57,6 +57,14 @@ class TelegramBotConnection(Connection):
         :return: The entities of the connection
         """
         return Address(str(self.bot.name))
+
+    @staticmethod
+    def settings_cls() -> Type[TelegramBotSettings]:
+        """
+        The settings class used by this connection
+        :return: The settings class
+        """
+        return TelegramBotSettings
 
     def send(self, message: Message):
         """

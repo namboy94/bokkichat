@@ -19,7 +19,7 @@ LICENSE"""
 
 import time
 import logging
-from typing import Callable, List
+from typing import Callable, List, Type
 from bokkichat.entities.Address import Address
 from bokkichat.entities.message.Message import Message
 from bokkichat.settings.Settings import Settings
@@ -48,6 +48,14 @@ class Connection:
         """
         A connection must be able to specify its own entities
         :return: The entities of the connection
+        """
+        raise NotImplementedError()
+
+    @staticmethod
+    def settings_cls() -> Type[Settings]:
+        """
+        The settings class used by this connection
+        :return: The settings class
         """
         raise NotImplementedError()
 
@@ -96,3 +104,13 @@ class Connection:
         :return: None
         """
         raise NotImplementedError()
+
+    @classmethod
+    def from_serialized_settings(cls, serialized: str):
+        """
+        Generates a Connection using serialized settings
+        :param serialized: The serialized settings
+        :return: The generated connection
+        """
+        settings = cls.settings_cls().deserialize(serialized)
+        return cls(settings)
