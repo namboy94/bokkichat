@@ -40,7 +40,7 @@ class Connection:
         :param settings: The settings for the connection
         """
         self.settings = settings
-        self.logger = logging.getLogger("bokkichat")
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.looping = False
         self.loop_break = False
 
