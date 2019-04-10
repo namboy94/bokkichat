@@ -78,3 +78,10 @@ class MediaMessage(Message):
         return MediaMessage(
             self.receiver, self.sender, media_type, data, caption
         )
+
+    @staticmethod
+    def is_media() -> bool:
+        """
+        :return: Whether or not the message is a media message
+        """
+        return True

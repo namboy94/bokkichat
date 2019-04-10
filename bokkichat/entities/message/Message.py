@@ -47,3 +47,17 @@ class Message:
         :return: The generated reply
         """
         raise NotImplementedError()
+
+    @staticmethod
+    def is_text() -> bool:
+        """
+        :return: Whether or not the message is a text message
+        """
+        return False
+
+    @staticmethod
+    def is_media() -> bool:
+        """
+        :return: Whether or not the message is a media message
+        """
+        return False

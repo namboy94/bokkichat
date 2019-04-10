@@ -68,3 +68,10 @@ class TextMessage(Message):
         if title is None:
             title = self.title
         return TextMessage(self.receiver, self.sender, body, title)
+
+    @staticmethod
+    def is_text() -> bool:
+        """
+        :return: Whether or not the message is a text message
+        """
+        return True
