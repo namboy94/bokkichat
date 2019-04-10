@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from __future__ import annotations
 import json
 from bokkichat.settings.Settings import Settings
 
@@ -45,7 +44,7 @@ class TelegramBotSettings(Settings):
         })
 
     @classmethod
-    def deserialize(cls, serialized: str) -> TelegramBotSettings:
+    def deserialize(cls, serialized: str) -> "TelegramBotSettings":
         """
         Deserializes a string and generates a Settings object from it
         :param serialized: The serialized string

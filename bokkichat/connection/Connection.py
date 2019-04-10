@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from __future__ import annotations
 import time
 import logging
 from typing import Callable, List, Type
@@ -107,7 +106,7 @@ class Connection:
         raise NotImplementedError()
 
     @classmethod
-    def from_serialized_settings(cls, serialized: str) -> Connection:
+    def from_serialized_settings(cls, serialized: str) -> "Connection":
         """
         Generates a Connection using serialized settings
         :param serialized: The serialized settings

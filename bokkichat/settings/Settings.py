@@ -17,8 +17,6 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from __future__ import annotations
-
 
 class Settings:
     """
@@ -34,7 +32,7 @@ class Settings:
         raise NotImplementedError()
 
     @classmethod
-    def deserialize(cls, serialized: str) -> Settings:
+    def deserialize(cls, serialized: str) -> "Settings":
         """
         Deserializes a string and generates a Settings object from it
         :param serialized: The serialized string
@@ -43,7 +41,7 @@ class Settings:
         raise NotImplementedError()
 
     @classmethod
-    def prompt(cls) -> Settings:
+    def prompt(cls) -> "Settings":
         """
         Prompts the user for input to generate a Settings object
         :return: The generated settings object

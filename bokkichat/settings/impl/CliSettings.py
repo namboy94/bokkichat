@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from __future__ import annotations
 from bokkichat.settings.Settings import Settings
 
 
@@ -35,7 +34,7 @@ class CliSettings(Settings):
         return ""
 
     @classmethod
-    def deserialize(cls, _: str) -> CliSettings:
+    def deserialize(cls, _: str) -> "CliSettings":
         """
         Deserializes a string and generates a Settings object from it
         :param _: The serialized string
