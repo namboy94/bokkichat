@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
+from __future__ import annotations
 from bokkichat.entities.Address import Address
 
 
@@ -37,5 +38,12 @@ class Message:
     def __str__(self) -> str:
         """
         :return: A string representation of the Message object
+        """
+        raise NotImplementedError()
+
+    def make_reply(self) -> Message:
+        """
+        Swaps the sender and receiver of the message
+        :return: The generated reply
         """
         raise NotImplementedError()

@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
+from typing import Optional
 from bokkichat.entities.message.Message import Message
 from bokkichat.entities.Address import Address
 
@@ -34,7 +35,7 @@ class TextMessage(Message):
             sender: Address,
             receiver: Address,
             body: str,
-            title: str = ""
+            title: Optional[str] = ""
     ):
         """
         Initializes the TextMessage object
@@ -52,3 +53,18 @@ class TextMessage(Message):
         :return: A string representation of the TextMessage object
         """
         return "{}: {}".format(self.title, self.body)
+
+    def make_reply(
+            self,
+            body: Optional[str] = None,
+            title: Optional[str] = None
+    ) -> Message:
+        """
+        Swaps the sender and receiver of the message
+        :return: The generated reply
+        """
+        if body is None:
+            body = self.body
+        if title is None:
+            title = self.title
+        return TextMessage(self.receiver, self.sender, body, title)
