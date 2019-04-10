@@ -32,10 +32,30 @@ class Settings:
         raise NotImplementedError()
 
     @classmethod
-    def deserialize(cls, serialized: str):
+    def deserialize(cls, serialized: str) -> "Settings":
         """
         Deserializes a string and generates a Settings object from it
         :param serialized: The serialized string
         :return: The deserialized Settings object
         """
         raise NotImplementedError()
+
+    @classmethod
+    def prompt(cls) -> "Settings":
+        """
+        Prompts the user for input to generate a Settings object
+        :return: The generated settings object
+        """
+        raise NotImplementedError()
+
+    @staticmethod
+    def user_input(prompt: str) -> str:
+        """
+        Prompts the user for input
+        :param prompt: The text to display with the prompt
+        :return: The resulting response
+        """
+        resp = ""
+        while not resp:
+            resp = input(prompt + ": ")
+        return resp

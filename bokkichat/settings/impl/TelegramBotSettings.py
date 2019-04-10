@@ -44,7 +44,7 @@ class TelegramBotSettings(Settings):
         })
 
     @classmethod
-    def deserialize(cls, serialized: str):
+    def deserialize(cls, serialized: str) -> "TelegramBotSettings":
         """
         Deserializes a string and generates a Settings object from it
         :param serialized: The serialized string
@@ -52,3 +52,12 @@ class TelegramBotSettings(Settings):
         """
         obj = json.loads(serialized)
         return cls(obj["api_key"])
+
+    @classmethod
+    def prompt(cls) -> Settings:
+        """
+        Prompts the user for input to generate a Settings object
+        :return: The generated settings object
+        """
+        api_key = cls.user_input("API Key")
+        return cls(api_key=api_key)

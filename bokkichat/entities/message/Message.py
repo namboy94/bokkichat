@@ -39,3 +39,24 @@ class Message:
         :return: A string representation of the Message object
         """
         raise NotImplementedError()
+
+    def make_reply(self) -> "Message":
+        """
+        Swaps the sender and receiver of the message
+        :return: The generated reply
+        """
+        raise NotImplementedError()
+
+    @staticmethod
+    def is_text() -> bool:
+        """
+        :return: Whether or not the message is a text message
+        """
+        return False
+
+    @staticmethod
+    def is_media() -> bool:
+        """
+        :return: Whether or not the message is a media message
+        """
+        return False

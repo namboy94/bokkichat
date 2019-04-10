@@ -34,10 +34,18 @@ class CliSettings(Settings):
         return ""
 
     @classmethod
-    def deserialize(cls, _: str):
+    def deserialize(cls, _: str) -> "CliSettings":
         """
         Deserializes a string and generates a Settings object from it
         :param _: The serialized string
         :return: The deserialized Settings object
         """
         return cls()
+
+    @classmethod
+    def prompt(cls) -> Settings:
+        """
+        Prompts the user for input to generate a Settings object
+        :return: The generated settings object
+        """
+        return CliSettings()
