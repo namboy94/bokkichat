@@ -123,6 +123,9 @@ class TelegramBotConnection(Connection):
             ):
                 self.update_id = update.update_id + 1
 
+                if update.message is None:
+                    continue
+
                 telegram_message = update.message.to_dict()
 
                 try:
