@@ -17,10 +17,11 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
+import time
 # noinspection PyPackageRequirements
 import telegram
 import requests
-from typing import List, Dict, Any, Optional, Type
+from typing import List, Dict, Any, Optional, Type, Callable
 from bokkichat.entities.Address import Address
 from bokkichat.entities.message.Message import Message
 from bokkichat.entities.message.TextMessage import TextMessage
@@ -123,6 +124,9 @@ class TelegramBotConnection(Connection):
             ):
                 self.update_id = update.update_id + 1
 
+                if update.message is None:
+                    continue
+
                 telegram_message = update.message.to_dict()
 
                 try:
@@ -206,3 +210,20 @@ class TelegramBotConnection(Connection):
         :return: None
         """
         pass
+
+    def loop(self, callback: Callable, sleep_time: int = 1):
+        """
+        Starts a loop that periodically checks for new messages, calling
+        a provided callback function in the process.
+        :param callback: The callback function to call for each
+                         received message.
+                         The callback should have the following format:
+                             lambda connection, message: do_stuff()
+        :param sleep_time: The time to sleep between loops
+        :return: None
+        """
+        try:
+            super().loop(callback, sleep_time)
+        except telegram.error.NetworkError:
+            time.sleep(10)
+            self.loop(callback, sleep_time)
