@@ -29,7 +29,7 @@ from bokkichat.entities.message.MediaType import MediaType
 from bokkichat.entities.message.MediaMessage import MediaMessage
 from bokkichat.connection.Connection import Connection
 from bokkichat.settings.impl.TelegramBotSettings import TelegramBotSettings
-from bokkichat.exceptions import InvalidMessageData
+from bokkichat.exceptions import InvalidMessageData, InvalidSettings
 
 
 class TelegramBotConnection(Connection):
@@ -44,7 +44,10 @@ class TelegramBotConnection(Connection):
         :param settings: The settings for the connection
         """
         super().__init__(settings)
-        self.bot = telegram.Bot(settings.api_key)
+        try:
+            self.bot = telegram.Bot(settings.api_key)
+        except telegram.error.InvalidToken:
+            raise InvalidSettings()
 
         try:
             self.update_id = self.bot.get_updates()[0].update_id

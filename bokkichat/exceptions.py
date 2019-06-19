@@ -39,3 +39,11 @@ class InvalidMessageData(Exception):
         :return: A string representation of the exception
         """
         return "InvalidMessageData: {}".format(self.message_data)
+
+
+class InvalidSettings(Exception):
+    """
+    Exception that gets raised whenever there's a problem with the settings.
+    Example: Invalid API key, connection can't be established
+    """
+    pass
