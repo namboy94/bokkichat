@@ -1,6 +1,8 @@
-V0.2.2:
+V 0.3.0:
+  - Add some error handling for invalid configurations
+V 0.2.2:
   - Fixed loop dying after a while
-V0.2.1:
+V 0.2.1:
   - Fixed telegram issue with edited messages
 V 0.2.0:
   - Implement message reply mechanisms
