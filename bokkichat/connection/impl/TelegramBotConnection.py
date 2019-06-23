@@ -84,7 +84,8 @@ class TelegramBotConnection(Connection):
             if isinstance(message, TextMessage):
                 self.bot.send_message(
                     chat_id=message.receiver.address,
-                    text=message.body
+                    text=message.body,
+                    parse_mode=telegram.ParseMode.MARKDOWN
                 )
             elif isinstance(message, MediaMessage):
 
@@ -104,7 +105,8 @@ class TelegramBotConnection(Connection):
                 params = {
                     "chat_id": message.receiver.address,
                     "caption": message.caption,
-                    media_map[message.media_type][0]: tempfile
+                    media_map[message.media_type][0]: tempfile,
+                    "parse_mode": telegram.ParseMode.MARKDOWN
                 }
                 send_func(**params)
                 tempfile.close()
