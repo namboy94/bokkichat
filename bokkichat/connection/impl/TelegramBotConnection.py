@@ -108,6 +108,10 @@ class TelegramBotConnection(Connection):
                     media_map[message.media_type][0]: tempfile,
                     "parse_mode": telegram.ParseMode.MARKDOWN
                 }
+
+                if media_map[message.media_type][0] == "video":
+                    params["timeout"] = 60  # Increase timeout for videos
+
                 send_func(**params)
                 tempfile.close()
 
