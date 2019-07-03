@@ -35,7 +35,7 @@ class MediaMessage(Message):
             receiver: Address,
             media_type: MediaType,
             data: bytes,
-            caption: str
+            caption: Optional[str] = ""
     ):
         """
         Initializes the TextMessage object
