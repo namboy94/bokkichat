@@ -83,9 +83,17 @@ class TelegramBotConnection(Connection):
 
         try:
             if isinstance(message, TextMessage):
+
+                # Escape '_' symbols since those somehow cause a text message
+                # send to fail for some reason
+                body = message.body
+                body = body.replace("\\_", "@@@PLACEHOLDER@@@")
+                body = body.replace("_", "\\_")
+                body = body.replace("@@@PLACEHOLDER@@@", "\\_")
+
                 self.bot.send_message(
                     chat_id=message.receiver.address,
-                    text=message.body,
+                    text=body,
                     parse_mode=telegram.ParseMode.MARKDOWN
                 )
             elif isinstance(message, MediaMessage):
