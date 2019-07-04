@@ -83,21 +83,12 @@ class TelegramBotConnection(Connection):
 
         try:
             if isinstance(message, TextMessage):
-
-                # Escape '_' symbols since those somehow cause a text message
-                # send to fail for some reason
-                body = message.body
-                body = body.replace("\\_", "@@@PLACEHOLDER@@@")
-                body = body.replace("_", "\\_")
-                body = body.replace("@@@PLACEHOLDER@@@", "\\_")
-
                 self.bot.send_message(
                     chat_id=message.receiver.address,
-                    text=body,
+                    text=self._escape_invalid_characters(message.body),
                     parse_mode=telegram.ParseMode.MARKDOWN
                 )
             elif isinstance(message, MediaMessage):
-
                 media_map = {
                     MediaType.AUDIO: ("audio", self.bot.send_audio),
                     MediaType.VIDEO: ("video", self.bot.send_video),
@@ -111,9 +102,10 @@ class TelegramBotConnection(Connection):
                     f.write(message.data)
 
                 tempfile = open("/tmp/bokkichat-telegram-temp", "rb")
+                caption = self._escape_invalid_characters(message.caption)
                 params = {
                     "chat_id": message.receiver.address,
-                    "caption": message.caption,
+                    "caption": caption,
                     media_map[message.media_type][0]: tempfile,
                     "parse_mode": telegram.ParseMode.MARKDOWN,
                     "timeout": 30
@@ -249,3 +241,16 @@ class TelegramBotConnection(Connection):
         except telegram.error.NetworkError:
             time.sleep(10)
             self.loop(callback, sleep_time)
+
+    @staticmethod
+    def _escape_invalid_characters(text: str) -> str:
+        """
+        Escapes invalid characters for telegram markdown in a text.
+        If this is not done, it may cause sent text to fail.
+        :param text: The text to escape
+        :return: The text with the escaped characters
+        """
+        text = text.replace("\\_", "@@@PLACEHOLDER@@@")
+        text = text.replace("_", "\\_")
+        text = text.replace("@@@PLACEHOLDER@@@", "\\_")
+        return text
