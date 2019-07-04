@@ -18,6 +18,7 @@ along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
 import time
+import socket
 # noinspection PyPackageRequirements
 import telegram
 import requests
@@ -78,7 +79,7 @@ class TelegramBotConnection(Connection):
         :return: None
         """
 
-        self.logger.info("Sending message to {}".format(message.receiver))
+        self.logger.info("Sending message to " + message.receiver.address)
 
         try:
             if isinstance(message, TextMessage):
@@ -113,7 +114,10 @@ class TelegramBotConnection(Connection):
                 if media_map[message.media_type][0] == "video":
                     params["timeout"] = 60  # Increase timeout for videos
 
-                send_func(**params)
+                try:
+                    send_func(**params)
+                except (socket.timeout, telegram.error.NetworkError):
+                    self.logger.error("Media Sending timed out")
                 tempfile.close()
 
         except (telegram.error.Unauthorized, telegram.error.BadRequest):
