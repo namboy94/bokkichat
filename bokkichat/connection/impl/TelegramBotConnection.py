@@ -106,7 +106,8 @@ class TelegramBotConnection(Connection):
                     "chat_id": message.receiver.address,
                     "caption": message.caption,
                     media_map[message.media_type][0]: tempfile,
-                    "parse_mode": telegram.ParseMode.MARKDOWN
+                    "parse_mode": telegram.ParseMode.MARKDOWN,
+                    "timeout": 30
                 }
 
                 if media_map[message.media_type][0] == "video":
