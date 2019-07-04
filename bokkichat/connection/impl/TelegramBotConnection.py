@@ -18,6 +18,7 @@ along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
 import time
+import socket
 # noinspection PyPackageRequirements
 import telegram
 import requests
@@ -78,16 +79,16 @@ class TelegramBotConnection(Connection):
         :return: None
         """
 
-        self.logger.info("Sending message to {}".format(message.receiver))
+        self.logger.info("Sending message to " + message.receiver.address)
 
         try:
             if isinstance(message, TextMessage):
                 self.bot.send_message(
                     chat_id=message.receiver.address,
-                    text=message.body
+                    text=self._escape_invalid_characters(message.body),
+                    parse_mode=telegram.ParseMode.MARKDOWN
                 )
             elif isinstance(message, MediaMessage):
-
                 media_map = {
                     MediaType.AUDIO: ("audio", self.bot.send_audio),
                     MediaType.VIDEO: ("video", self.bot.send_video),
@@ -101,12 +102,22 @@ class TelegramBotConnection(Connection):
                     f.write(message.data)
 
                 tempfile = open("/tmp/bokkichat-telegram-temp", "rb")
+                caption = self._escape_invalid_characters(message.caption)
                 params = {
                     "chat_id": message.receiver.address,
-                    "caption": message.caption,
-                    media_map[message.media_type][0]: tempfile
+                    "caption": caption,
+                    media_map[message.media_type][0]: tempfile,
+                    "parse_mode": telegram.ParseMode.MARKDOWN,
+                    "timeout": 30
                 }
-                send_func(**params)
+
+                if media_map[message.media_type][0] == "video":
+                    params["timeout"] = 60  # Increase timeout for videos
+
+                try:
+                    send_func(**params)
+                except (socket.timeout, telegram.error.NetworkError):
+                    self.logger.error("Media Sending timed out")
                 tempfile.close()
 
         except (telegram.error.Unauthorized, telegram.error.BadRequest):
@@ -230,3 +241,16 @@ class TelegramBotConnection(Connection):
         except telegram.error.NetworkError:
             time.sleep(10)
             self.loop(callback, sleep_time)
+
+    @staticmethod
+    def _escape_invalid_characters(text: str) -> str:
+        """
+        Escapes invalid characters for telegram markdown in a text.
+        If this is not done, it may cause sent text to fail.
+        :param text: The text to escape
+        :return: The text with the escaped characters
+        """
+        text = text.replace("\\_", "@@@PLACEHOLDER@@@")
+        text = text.replace("_", "\\_")
+        text = text.replace("@@@PLACEHOLDER@@@", "\\_")
+        return text

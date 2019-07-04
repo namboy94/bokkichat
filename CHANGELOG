@@ -1,3 +1,8 @@
+V 0.3.2:
+  - Fixed some issues with timeouts when sending media files using telegram
+  - Fixed issues with telegram formatting and '_' characters
+V 0.3.1:
+  - Fixed telegram formatting
 V 0.3.0:
   - Add some error handling for invalid configurations
 V 0.2.2:
