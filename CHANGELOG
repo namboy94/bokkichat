@@ -1,3 +1,5 @@
+V 0.4.0:
+  - Made name class method for connection classes mandatory
 V 0.3.2:
   - Fixed some issues with timeouts when sending media files using telegram
   - Fixed issues with telegram formatting and '_' characters

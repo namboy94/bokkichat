@@ -30,6 +30,14 @@ class CliConnection(Connection):
     Class that implements a CLI connection which can be used in testing
     """
 
+    @classmethod
+    def name(cls) -> str:
+        """
+        The name of the connection class
+        :return: The connection class name
+        """
+        return "cli"
+
     @property
     def address(self) -> Address:
         """
@@ -39,8 +47,8 @@ class CliConnection(Connection):
         """
         return Address("CLI")
 
-    @staticmethod
-    def settings_cls() -> Type[CliSettings]:
+    @classmethod
+    def settings_cls(cls) -> Type[CliSettings]:
         """
         The settings class used by this connection
         :return: The settings class

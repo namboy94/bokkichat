@@ -55,6 +55,14 @@ class TelegramBotConnection(Connection):
         except IndexError:
             self.update_id = 0
 
+    @classmethod
+    def name(cls) -> str:
+        """
+        The name of the connection class
+        :return: The connection class name
+        """
+        return "telegram-bot"
+
     @property
     def address(self) -> Address:
         """
@@ -63,8 +71,8 @@ class TelegramBotConnection(Connection):
         """
         return Address(str(self.bot.name))
 
-    @staticmethod
-    def settings_cls() -> Type[TelegramBotSettings]:
+    @classmethod
+    def settings_cls(cls) -> Type[TelegramBotSettings]:
         """
         The settings class used by this connection
         :return: The settings class
@@ -239,6 +247,7 @@ class TelegramBotConnection(Connection):
         try:
             super().loop(callback, sleep_time)
         except telegram.error.NetworkError:
+            self.logger.error("Encountered Network Error. Trying to reconnect")
             time.sleep(10)
             self.loop(callback, sleep_time)
 
