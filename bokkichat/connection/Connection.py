@@ -43,6 +43,14 @@ class Connection:
         self.looping = False
         self.loop_break = False
 
+    @classmethod
+    def name(cls) -> str:
+        """
+        The name of the connection class
+        :return: The connection class name
+        """
+        raise NotImplementedError()
+
     @property
     def address(self) -> Address:
         """
@@ -51,8 +59,8 @@ class Connection:
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def settings_cls() -> Type[Settings]:
+    @classmethod
+    def settings_cls(cls) -> Type[Settings]:
         """
         The settings class used by this connection
         :return: The settings class
