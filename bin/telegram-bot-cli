@@ -100,6 +100,7 @@ if __name__ == "__main__":
         for message in messages:
             print("{}: {}".format(message.sender, message))
 
+
     elif args.mode == "echo":
 
         def echo(con, msg):
