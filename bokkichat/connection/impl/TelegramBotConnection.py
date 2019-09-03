@@ -259,7 +259,9 @@ class TelegramBotConnection(Connection):
         :param text: The text to escape
         :return: The text with the escaped characters
         """
-        text = text.replace("\\_", "@@@PLACEHOLDER@@@")
-        text = text.replace("_", "\\_")
-        text = text.replace("@@@PLACEHOLDER@@@", "\\_")
+        for char in ["_", "*"]:
+            text = text.replace("\\" + char, "@@@PLACEHOLDER@@@")
+            text = text.replace(char, "\\" + char)
+            text = text.replace("@@@PLACEHOLDER@@@", "\\" + char)
+
         return text
