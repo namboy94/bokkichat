@@ -1,3 +1,5 @@
+V 0.4.3:
+  - Fixed issue with '*' characters in telegram bot
 V 0.4.2:
   - Uses docker for CI now
 V 0.4.1:
