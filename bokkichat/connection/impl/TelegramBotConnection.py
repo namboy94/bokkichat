@@ -91,11 +91,12 @@ class TelegramBotConnection(Connection):
 
         try:
             if isinstance(message, TextMessage):
-                self.bot.send_message(
-                    chat_id=message.receiver.address,
-                    text=self._escape_invalid_characters(message.body),
-                    parse_mode=telegram.ParseMode.MARKDOWN
-                )
+                for chunk in message.split(4096):
+                    self.bot.send_message(
+                        chat_id=message.receiver.address,
+                        text=self._escape_invalid_characters(chunk),
+                        parse_mode=telegram.ParseMode.MARKDOWN
+                    )
             elif isinstance(message, MediaMessage):
                 media_map = {
                     MediaType.AUDIO: ("audio", self.bot.send_audio),
@@ -110,14 +111,17 @@ class TelegramBotConnection(Connection):
                     f.write(message.data)
 
                 tempfile = open("/tmp/bokkichat-telegram-temp", "rb")
-                caption = self._escape_invalid_characters(message.caption)
                 params = {
                     "chat_id": message.receiver.address,
-                    "caption": caption,
                     media_map[message.media_type][0]: tempfile,
                     "parse_mode": telegram.ParseMode.MARKDOWN,
-                    "timeout": 30
+                    "timeout": 30,
+                    "caption": ""
                 }
+                if message.caption is not None:
+                    params["caption"] = self._escape_invalid_characters(
+                        message.caption
+                    )
 
                 if media_map[message.media_type][0] == "video":
                     params["timeout"] = 60  # Increase timeout for videos
@@ -153,6 +157,8 @@ class TelegramBotConnection(Connection):
 
                 try:
                     generated = self._parse_message(telegram_message)
+                    if generated is None:
+                        continue
                     self.logger.info(
                         "Received message from {}".format(generated.sender)
                     )
