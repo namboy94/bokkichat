@@ -111,14 +111,17 @@ class TelegramBotConnection(Connection):
                     f.write(message.data)
 
                 tempfile = open("/tmp/bokkichat-telegram-temp", "rb")
-                caption = self._escape_invalid_characters(message.caption)
                 params = {
                     "chat_id": message.receiver.address,
-                    "caption": caption,
                     media_map[message.media_type][0]: tempfile,
                     "parse_mode": telegram.ParseMode.MARKDOWN,
-                    "timeout": 30
+                    "timeout": 30,
+                    "caption": ""
                 }
+                if message.caption is not None:
+                    params["caption"] = self._escape_invalid_characters(
+                        message.caption
+                    )
 
                 if media_map[message.media_type][0] == "video":
                     params["timeout"] = 60  # Increase timeout for videos
@@ -154,6 +157,8 @@ class TelegramBotConnection(Connection):
 
                 try:
                     generated = self._parse_message(telegram_message)
+                    if generated is None:
+                        continue
                     self.logger.info(
                         "Received message from {}".format(generated.sender)
                     )
