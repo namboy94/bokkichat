@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with bokkichat.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-from typing import Optional
+from typing import Optional, List
 from bokkichat.entities.message.Message import Message
 from bokkichat.entities.Address import Address
 
@@ -75,3 +75,22 @@ class TextMessage(Message):
         :return: Whether or not the message is a text message
         """
         return True
+
+    def split(self, max_chars: int) -> List[str]:
+        """
+        Splits the body text into multiple chunks below a certain size.
+        Will try to not break up any lines
+        :param max_chars: The chunk size
+        :return: The parts of the message
+        """
+        parts = [""]
+        for line in self.body.split("\n"):
+            if len(line) > max_chars:
+                line = line[0:max_chars - 4] + "..."
+            current_chunk = parts[-1]
+            if len(current_chunk) + len(line) > max_chars:
+                parts.append(line)
+            else:
+                parts[-1] = current_chunk + "\n" + line
+
+        return parts

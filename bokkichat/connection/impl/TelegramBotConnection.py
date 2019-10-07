@@ -91,11 +91,12 @@ class TelegramBotConnection(Connection):
 
         try:
             if isinstance(message, TextMessage):
-                self.bot.send_message(
-                    chat_id=message.receiver.address,
-                    text=self._escape_invalid_characters(message.body),
-                    parse_mode=telegram.ParseMode.MARKDOWN
-                )
+                for chunk in message.split(4096):
+                    self.bot.send_message(
+                        chat_id=message.receiver.address,
+                        text=self._escape_invalid_characters(chunk),
+                        parse_mode=telegram.ParseMode.MARKDOWN
+                    )
             elif isinstance(message, MediaMessage):
                 media_map = {
                     MediaType.AUDIO: ("audio", self.bot.send_audio),

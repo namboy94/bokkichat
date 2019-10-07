@@ -1,3 +1,5 @@
+V 0.4.4:
+  - Fixed issue with sending too long telegram text messages
 V 0.4.3:
   - Fixed issue with '*' characters in telegram bot
 V 0.4.2:
