@@ -1,3 +1,5 @@
+V 0.4.5:
+  - Removed 'typing' dependency
 V 0.4.4:
   - Fixed issue with sending too long telegram text messages
 V 0.4.3:

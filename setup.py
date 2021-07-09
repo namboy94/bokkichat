@@ -38,7 +38,6 @@ if __name__ == "__main__":
         packages=find_packages(),
         scripts=list(map(lambda x: os.path.join("bin", x), os.listdir("bin"))),
         install_requires=[
-            "typing",
             "python-telegram-bot",
             "requests"
         ],
